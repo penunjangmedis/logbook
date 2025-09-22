@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LogBook Penunjang Medis RS Mitra Plumbon</title>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f5f5f5;}
     header { background:#2a7b83; color:#fff; padding:1rem; text-align:center;}
@@ -51,27 +51,25 @@
       <label>1. Briefing</label>
       <select name="briefing"><option value="1">TIDAK</option><option value="2">YA</option></select>
       <label>2. Implementasi SOP</label>
-      <select name="sop"><option value="1">ADA DISCREPANCY</option><option value="2">TIDAK ADA DISCREPANCY</option></select>
+      <select name="sop"><option value="1">ADA DISCREPANCY</option><option value="2">TIDAK ADA</option></select>
       <label>3. Supervisi Sarana & Prasarana</label>
-      <select name="sarana"><option value="1">ADA KERUSAKAN</option><option value="2">TIDAK ADA KERUSAKAN</option></select>
+      <select name="sarana"><option value="1">ADA KERUSAKAN</option><option value="2">TIDAK ADA</option></select>
       <label>4. Penyelesaian Komplain</label>
-      <select name="komplain"><option value="1">TIDAK ADA PENYELESAIAN</option><option value="2">ADA PENYELESAIAN</option></select>
-      <label>5. Pengisian Indikator Mutu & Validasi Data</label>
+      <select name="komplain"><option value="1">TIDAK ADA PENYELESAIAN</option><option value="2">ADA</option></select>
+      <label>5. Indikator Mutu & Validasi</label>
       <select name="mutu"><option value="1">TIDAK ADA</option><option value="2">ADA</option></select>
       <label>6. Coaching Staf</label>
       <select name="coaching"><option value="1">TIDAK ADA</option><option value="2">ADA</option></select>
-      <label>7. Supervisi Pengisian Logbook Staf</label>
+      <label>7. Supervisi Logbook Staf</label>
       <select name="logbook"><option value="1">TIDAK SEMUA TERISI</option><option value="2">TERISI SEMUA</option></select>
-      <label>8. Laporan Harian ke Bidang</label>
+      <label>8. Laporan Harian</label>
       <select name="laporan"><option value="1">DI ATAS JAM 09.00</option><option value="2">SEBELUM JAM 09.00</option></select>
       <label>9. Supervisi Unit Pelayanan</label>
-      <select name="unit"><option value="1">TIDAK SUPERVISI</option><option value="2">SUPERVISI SEBAGIAN</option><option value="3">SUPERVISI SELURUH BAGIAN</option></select>
+      <select name="unit"><option value="1">TIDAK SUPERVISI</option><option value="2">SEBAGIAN</option><option value="3">SELURUH</option></select>
       <label>Kendala</label>
       <textarea name="kendala"></textarea>
       <label>Tindak Lanjut</label>
       <textarea name="tindak"></textarea>
-      <label>Upload Foto</label>
-      <input type="file" name="foto"/>
       <button type="submit">Kirim</button>
     </form>
     <button onclick="logout()">Logout</button>
@@ -86,15 +84,14 @@
     <button onclick="logout()">Logout</button>
   </div>
 
-<script type="module">
+<script>
   // Firebase Config
   const firebaseConfig = {
     databaseURL: "https://logbook-penunjang-medis-default-rtdb.asia-southeast1.firebasedatabase.app/"
   };
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+  firebase.initializeApp(firebaseConfig);
 
-  // Akun (email -> role)
+  // Akun statis
   const accounts = {
     "kabid@rsmp.com": {role:"admin", name:"Kabid"},
     "kasubid@rsmp.com": {role:"admin", name:"Kasubid"},
@@ -111,7 +108,7 @@
   let currentUser = null;
 
   // Login
-  window.login = function() {
+  function login() {
     const email = document.getElementById("email").value;
     const pass = document.getElementById("password").value;
 
@@ -127,20 +124,20 @@
     } else {
       alert("Email tidak terdaftar.");
     }
-  };
+  }
 
-  // Reset password (dummy)
-  window.resetPassword = function() {
+  // Reset password dummy
+  function resetPassword() {
     const email = prompt("Masukkan email untuk reset password:");
     if(email) alert("Link reset password dikirim ke " + email);
-  };
+  }
 
   // Logout
-  window.logout = function() {
+  function logout() {
     currentUser = null;
     document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
     document.getElementById("loginPage").classList.remove("hidden");
-  };
+  }
 
   // Submit Log User
   document.getElementById("logForm").addEventListener("submit", e=>{
@@ -181,7 +178,7 @@
             <td>
               Briefing:${l.briefing}, SOP:${l.sop}, Sarana:${l.sarana}, Komplain:${l.komplain}, Mutu:${l.mutu}, Coaching:${l.coaching}, Logbook:${l.logbook}, Laporan:${l.laporan}, Unit:${l.unit}<br>
               Kendala:${l.kendala}<br>
-              Tindak Lanjut:${l.tindak}
+              Tindak:${l.tindak}
             </td>
           </tr>`;
         });
