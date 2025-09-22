@@ -10,15 +10,24 @@
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f5f5f5;}
     header { background:#2a7b83; color:#fff; padding:1rem; text-align:center;}
-    .container { max-width:900px; margin:1rem auto; background:#fff; padding:1.5rem; border-radius:8px; }
+    .container { max-width:900px; margin:1rem auto; background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
     h2 { margin-top:0; }
     .hidden { display:none; }
-    table { width:100%; border-collapse:collapse; margin-top:1rem;}
-    table, th, td { border:1px solid #ccc; }
-    th, td { padding:0.5rem; text-align:left; }
-    button { margin-top:1rem; padding:0.5rem 1rem; background:#2a7b83; color:#fff; border:none; border-radius:4px; cursor:pointer;}
+    input, select, textarea { width:100%; margin:0.3rem 0; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:1rem; }
+    button { width:100%; margin-top:1rem; padding:0.7rem; background:#2a7b83; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:1rem; }
     button:hover { background:#256b72; }
-    select, input, textarea { width:100%; margin:0.3rem 0; padding:0.4rem; }
+    table { width:100%; border-collapse:collapse; margin-top:1rem; font-size:0.9rem; }
+    table, th, td { border:1px solid #ccc; }
+    th, td { padding:0.5rem; text-align:left; vertical-align:top; }
+    .table-container { overflow-x:auto; }
+    a { color:#2a7b83; cursor:pointer; }
+    @media (max-width:600px) {
+      header h1 { font-size:1.2rem; }
+      .container { padding:1rem; margin:0.5rem; }
+      button { font-size:0.9rem; padding:0.6rem; }
+      input, select, textarea { font-size:0.9rem; }
+      table, th, td { font-size:0.8rem; }
+    }
   </style>
 </head>
 <body>
@@ -26,12 +35,13 @@
     <h1>LogBook Penunjang Medis RS Mitra Plumbon</h1>
   </header>
 
+  <!-- Login -->
   <div class="container" id="loginPage">
     <h2>Login</h2>
     <input type="email" id="email" placeholder="Email" required />
     <input type="password" id="password" placeholder="Password" required />
     <button onclick="login()">Login</button>
-    <p><a href="#" onclick="resetPassword()">Lupa Password?</a></p>
+    <p><a onclick="resetPassword()">Lupa Password?</a></p>
   </div>
 
   <!-- User Form -->
@@ -70,7 +80,9 @@
   <!-- Admin Dashboard -->
   <div class="container hidden" id="adminPage">
     <h2>Dashboard Admin</h2>
-    <div id="logs"></div>
+    <div class="table-container">
+      <div id="logs"></div>
+    </div>
     <button onclick="logout()">Logout</button>
   </div>
 
@@ -82,7 +94,7 @@
   const app = firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // Simple login mapping (email → role)
+  // Akun (email -> role)
   const accounts = {
     "kabid@rsmp.com": {role:"admin", name:"Kabid"},
     "kasubid@rsmp.com": {role:"admin", name:"Kasubid"},
